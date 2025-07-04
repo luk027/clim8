@@ -1,11 +1,11 @@
-import type { ForcastData } from "@/api/types"
+import type { ForecastData } from "@/api/types"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { format } from "date-fns"
 
 
 interface HourlyTempratureProps{
-    data: ForcastData;
+    data: ForecastData;
 }
 
 const HourlyTemprature = ({ data }: HourlyTempratureProps) => {
@@ -14,7 +14,13 @@ const HourlyTemprature = ({ data }: HourlyTempratureProps) => {
         return (kelvin - 273.15).toFixed();
       }
 
-    const chartData = data.list.slice(0, 8).map((item) => ({
+    const chartData = data.list.slice(0, 8).map((item: {
+        dt: number;
+        main: {
+            temp: number;
+            feels_like: number;
+        };
+    }) => ({
         time: format(new Date(item.dt * 1000), "ha"),
         temp: kelvinToCelsius(item.main.temp),
         feels_like: kelvinToCelsius(item.main.feels_like)
